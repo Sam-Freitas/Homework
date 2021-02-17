@@ -6,8 +6,8 @@ import numpy
 from numpy.random import multivariate_normal as N
 import numpy as np
 import matplotlib.pyplot as plt
-
-
+import math
+import matplotlib.patches as mpatches
 
 # 2 
 
@@ -40,11 +40,11 @@ data_full = np.append(data1,data2,axis=0)
 labels_full = np.append(np.zeros(len(data1)),np.ones(len(data2)),axis=0)
 
 
-def _sigmoid(x):
+def my_sigmoid(x):
     return 1/(1 + np.exp(-x))
 
-epochs = 500
-lr = 0.1
+epochs = 200
+learning_rate = 0.1
 X = np.asarray(data_full).T
 y = np.asarray(labels_full).T
 X = np.concatenate([X,np.ones([1,X.shape[-1]])],axis=0)
@@ -56,15 +56,17 @@ loss = []
 # train
 for i in range(epochs):
     X_hat = np.matmul(W,X)
-    y_hat = _sigmoid(X_hat)
+    y_hat = my_sigmoid(X_hat)
 
+    cost = -np.sum(y*np.log(y_hat + 1e-5) + (1-y)*np.log(1-y_hat + 1e-5))
     
-    
-    cost = -np.sum(y*np.log(y_hat) + (1-y)*np.log(1-y_hat))
+    if math.isnan(cost):
+        cost = 0
+
     loss.append(cost)
     
     dc_dw = -np.sum((y-y_hat)*X,axis=-1)[np.newaxis,:]
-    W = W - dc_dw * lr - cost
+    W = W - (dc_dw * learning_rate)/cost
     
 def plot_loss(loss):
     plt.scatter(list(range(len(loss))),loss)
@@ -75,7 +77,7 @@ def plot_loss(loss):
 Z = np.asarray(data_full).T
 X = np.concatenate([Z,np.ones([1,Z.shape[-1]])],axis=0)
 X_hat = np.matmul(W,X)
-y_hat = _sigmoid(X_hat)
+y_hat = my_sigmoid(X_hat)
     
 
 plt.ion()
@@ -96,17 +98,18 @@ f2 = plt.figure(2)
 # plots the data 
 for i in range(len(y_hat[0])):
     if np.round(y_hat[0][i]) > 0:
-        plt.plot(data_full[i,0], data_full[i,1], 'o', c='r')
-    else:
         plt.plot(data_full[i,0], data_full[i,1], 'o', c='g')
+    else:
+        plt.plot(data_full[i,0], data_full[i,1], 'o', c='r')
 plt.axis('equal')
 plt.title('tested w/ labels')
-plt.legend(['d1','d2'])
+pop_a = mpatches.Patch(color='r', label='Population A')
+pop_b = mpatches.Patch(color='g', label='Population B')
+plt.title('Training data sorted with custom linear regression')
+plt.legend(handles=[pop_a,pop_b])
 f2.show()
 
-plt.ioff()
 
-plt.show()
 
 # 3
 
@@ -119,3 +122,31 @@ plt.show()
 # You should plot̂ pX|Y(x|y) using apseudo color plot (seehttps://goo.gl/2SDJPL). 
 # Note that you must model̂ pX(x),̂pY(y), and̂ pX|Y(x|y). 
 # Note that̂ pX(x)can be calculated using the Law of Total Probability.arizona.edu4February 17, 2021
+
+# from lecture 
+
+def gen_cb(N, a, alpha): 
+    """
+    N: number of points on the checkerboard
+    a: width of the checker board (0<a<1)
+    alpha: rotation of the checkerboard in radians 
+    """
+    d = np.random.rand(N, 2).T  # THIS IS THE LINE OF CODE THAT IS DIFFERENT
+    d_transformed = np.array([d[0]*np.cos(alpha)-d[1]*np.sin(alpha), 
+                              d[0]*np.sin(alpha)+d[1]*np.cos(alpha)]).T
+    s = np.ceil(d_transformed[:,0]/a)+np.floor(d_transformed[:,1]/a)
+    lab = 2 - (s%2)
+    data = d.T
+    return data, lab 
+
+X,y = gen_cb(5000, 0.25, np.pi/4)
+
+f3 = plt.figure(3)
+plt.plot(X[np.where(y==1)[0],0], X[np.where(y==1)[0],1], 'o')
+plt.plot(X[np.where(y==2)[0],0], X[np.where(y==2)[0],1], 's',c = 'r')
+
+
+
+plt.ioff()
+
+plt.show()
