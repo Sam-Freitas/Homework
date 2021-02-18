@@ -169,6 +169,7 @@ y = np.linspace(0,1,points_between)
 
 B_density = np.zeros((points_between,points_between))
 R_density = np.zeros((points_between,points_between))
+G = np.zeros((points_between,points_between))
 
 for i in range(points_between):
     for j in range(points_between):
