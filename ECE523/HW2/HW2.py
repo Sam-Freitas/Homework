@@ -8,6 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import math
 import matplotlib.patches as mpatches
+from PIL import Image
 
 # 2 
 
@@ -139,13 +140,77 @@ def gen_cb(N, a, alpha):
     data = d.T
     return data, lab 
 
-X,y = gen_cb(5000, 0.25, np.pi/4)
+
+points_to_gen = 1000
+X,y = gen_cb(points_to_gen, 0.25, np.pi/4)
 
 f3 = plt.figure(3)
 plt.plot(X[np.where(y==1)[0],0], X[np.where(y==1)[0],1], 'o')
 plt.plot(X[np.where(y==2)[0],0], X[np.where(y==2)[0],1], 's',c = 'r')
 
+# split data 
 
+X_blue = X[np.where(y==1)]
+X_red = X[np.where(y==2)]
+
+p_b_y = len(X_blue)/points_to_gen
+p_r_y = len(X_red)/points_to_gen
+
+# pX|Y(x|y)
+# P = k/n /V
+
+k = 10
+n = points_to_gen
+
+points_between = 100
+
+x = np.linspace(0,1,points_between)
+y = np.linspace(0,1,points_between)
+
+B_density = np.zeros((points_between,points_between))
+R_density = np.zeros((points_between,points_between))
+
+for i in range(points_between):
+    for j in range(points_between):
+        this_point = [x[i],y[j]]
+        B_dist = np.zeros((len(X_blue),))
+        R_dist = np.zeros((len(X_red),))
+        for o, val in enumerate(X_blue):
+            B_dist[o] = np.linalg.norm(this_point-val)
+        for o, val in enumerate(X_red):
+            R_dist[o] = np.linalg.norm(this_point-val)
+        B_dist = np.sort(B_dist)
+        R_dist = np.sort(R_dist)
+
+        r_blue = B_dist[k]
+        r_red = R_dist[k]
+
+        B_density[i][j] = (k/n)/(np.pi*r_blue*r_blue)
+        R_density[i][j] = (k/n)/(np.pi*r_red*r_red)
+
+scaler = max([R_density.max(),B_density.max()])
+rgb_uint8 = (np.dstack((R_density/scaler,G,B_density/scaler)) * 255.999) .astype(np.uint8)
+
+img = Image.fromarray(rgb_uint8,'RGB')
+img.save('HW2_KNN_density.png')
+
+# now find the probability of blue or red of a random point
+random_point = np.random.random(2)
+print('Given random point', random_point)
+
+idx_x =  (np.abs(x - random_point[0])).argmin()
+idx_y =  (np.abs(y - random_point[1])).argmin()
+
+P_blue = B_density[idx_x][idx_y]
+P_red = R_density[idx_x][idx_y]
+
+print('pX|Y(Blue|red)', P_red)
+print('pX|Y(Red|Blue)', P_blue)
+
+if P_blue > P_red:
+    print('Most likely Blue')
+else:
+    print('Most likely Red')
 
 plt.ioff()
 
