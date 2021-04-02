@@ -4,6 +4,17 @@
 
 # reference: https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html
 
+"""
+In class we discussed the derivation of the backpropagation algorithm for neural networks. 
+In thisproblem, you will train a neural network on the CIFAR10 data set. 
+Train a Multi-Layer Perceptron(MLP) neural network on the CIFAR10 data set.  
+This is an opened implementation problem,
+but I expect that you implement the MLP with at least two 
+different hidden layer sizes and useregularization.
+
+"""
+
+
 import numpy as np 
 import os
 import torch
