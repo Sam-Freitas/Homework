@@ -33,13 +33,14 @@ class DecisionStump():
 
     def predict(self, X):
 
+        # using homework 1's random IID choice generator 
         M = X.shape[0]
-        N_ints = np.random.randint(1,M+1, M)
+        N_ints = np.random.randint(1,M, M)
         p_uniform = np.array(np.ones((np.max(N_ints),))/np.max(N_ints))
 
         rand_choice = np.random.choice(np.arange(1, len(p_uniform)+1), size=1,p=p_uniform) 
 
-        this_threshold = X[rand_choice][0][0]
+        this_threshold = X[rand_choice][0][self.feature_idx]
 
         n_samples = X.shape[0]
         X_column = X[:, self.feature_idx]
@@ -76,7 +77,7 @@ class Adaboost():
 
                 for threshold in thresholds:
                     # predict with polarity 1
-                    p = .5
+                    p = 1
                     predictions = np.ones(n_samples)
                     predictions[X_column < threshold] = -1
 
@@ -146,6 +147,9 @@ def gen_multilabel_data(num_labels,num_samples_per,size_constraint):
 
 X,y = gen_multilabel_data(num_labels = 2,num_samples_per = 100,size_constraint = 4)
 
+# change the labels from 0&1 to -1&1
+y[y==0]=-1
+
 plot_2D_labeled_data(X,y,1,"Given data")
 
 clf = Adaboost()
@@ -154,7 +158,13 @@ clf.fit(X,y)
 
 y2 = clf.predict(X)
 
-plot_2D_labeled_data(X,y2,2,"Adaboost data")
+plot_2D_labeled_data(X,y2,2,"Adaboost data custom")
+
+clf2 = AdaBoostClassifier()
+clf2.fit(X,y)
+y3 = clf2.predict(X)
+
+plot_2D_labeled_data(X,y3,3,"Adaboost data sklearn")
 
 print("end")
 plt.ioff()
