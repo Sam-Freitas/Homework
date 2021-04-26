@@ -18,19 +18,11 @@ def plot_2D_labeled_data(X,y,fig_number,fig_title):
 
     plt.ion()
     f = plt.figure(fig_number)
-    plt.scatter(X[:,0],X[:,1],c=colors,alpha=0.7)
+    plt.scatter(X[:,0],X[:,1],c=colors,alpha=0.5)
     # plt.axis('tight')
     plt.title(fig_title)
     f.show()
     return fig_number+1
-
-def anomalyScores(originalDF, reducedDF):
-    loss = np.sum((np.array(originalDF) - \
-                   np.array(reducedDF))**2, axis=1)
-    
-    print('Mean for anomaly scores: ', np.mean(loss))
-    
-    return loss 
 
 def get_acc(predictions,labels):
 
@@ -123,6 +115,18 @@ for count, val in enumerate(percent_given_labels):
                         validation_data=(this_X, this_y),
                         verbose=0,
                         callbacks=[callback])
+
+    acc_hist = history.history['accuracy']
+    err_hist = 1-np.asarray(acc_hist)
+
+    print('Using ', val, ' of data')
+
+    print('(1) - first classifier training error with only assigned labels:', err_hist[0])
+
+    num_epochs_used = len(acc_hist)
+    middle_epoch = round(num_epochs_used/2)
+    
+    print('(2) - error at time point epoch num:', middle_epoch, ' - gives error:', err_hist[middle_epoch])
     
     predictions = model.predict(unlabeled_data)
 
@@ -130,7 +134,9 @@ for count, val in enumerate(percent_given_labels):
 
     this_accuracy = get_acc(prediction_labels,labels)
 
-    print('Using',val,'of the data the model is',this_accuracy)
+    print('(3) - Error after entire SSL :', np.min(err_hist))
+
+    print('Accuracy of model on entire data set is :', this_accuracy)
 
     fig_title = "Predictions using" + str(val) + " of data with acc:" + str(this_accuracy) + "accurate"
 
