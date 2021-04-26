@@ -1,0 +1,80 @@
+Dataset: abalone.csv
+Found 4177 data points with 8 features and 3 separate labels
+Using 627 data points per k-fold
+Accuracy of k-model 1 on entire data set is: 0.11970313622216902
+Accuracy of k-model 2 on entire data set is: 0.11395738568350491
+Accuracy of k-model 3 on entire data set is: 0.11419679195594924
+Accuracy of k-model 4 on entire data set is: 0.11922432367728035
+Accuracy of k-model 5 on entire data set is: 0.11443619822839358
+Dataset: blood.csv
+Found 748 data points with 4 features and 2 separate labels
+Using 113 data points per k-fold
+Accuracy of k-model 1 on entire data set is: 0.23529411764705882
+Accuracy of k-model 2 on entire data set is: 0.2339572192513369
+Accuracy of k-model 3 on entire data set is: 0.23796791443850268
+Accuracy of k-model 4 on entire data set is: 0.23796791443850268
+Accuracy of k-model 5 on entire data set is: 0.23796791443850268
+Dataset: breast-cancer.csv
+Found 286 data points with 9 features and 2 separate labels
+Using 43 data points per k-fold
+Accuracy of k-model 1 on entire data set is: 0.24825174825174826
+Accuracy of k-model 2 on entire data set is: 0.24825174825174826
+Accuracy of k-model 3 on entire data set is: 0.25524475524475526
+Accuracy of k-model 4 on entire data set is: 0.26223776223776224
+Accuracy of k-model 5 on entire data set is: 0.2517482517482518
+Dataset: car.csv
+Found 1728 data points with 6 features and 4 separate labels
+Using 260 data points per k-fold
+Accuracy of k-model 1 on entire data set is: 0.16319444444444445
+Accuracy of k-model 2 on entire data set is: 0.15162037037037038
+Accuracy of k-model 3 on entire data set is: 0.1440972222222222
+Accuracy of k-model 4 on entire data set is: 0.13368055555555555
+Accuracy of k-model 5 on entire data set is: 0.1568287037037037
+Dataset: congressional-voting.csv
+Found 435 data points with 16 features and 2 separate labels
+Using 66 data points per k-fold
+Accuracy of k-model 1 on entire data set is: 0.2574712643678161
+Accuracy of k-model 2 on entire data set is: 0.2574712643678161
+Accuracy of k-model 3 on entire data set is: 0.2574712643678161
+Accuracy of k-model 4 on entire data set is: 0.2574712643678161
+Accuracy of k-model 5 on entire data set is: 0.2574712643678161
+Dataset: credit-approval.csv
+Found 690 data points with 15 features and 2 separate labels
+Using 104 data points per k-fold
+Accuracy of k-model 1 on entire data set is: 0.26231884057971017
+Accuracy of k-model 2 on entire data set is: 0.28840579710144926
+Accuracy of k-model 3 on entire data set is: 0.19855072463768117
+Accuracy of k-model 4 on entire data set is: 0.3753623188405797
+Accuracy of k-model 5 on entire data set is: 0.263768115942029
+Dataset: echocardiogram.csv
+Found 131 data points with 10 features and 2 separate labels
+Using 20 data points per k-fold
+Accuracy of k-model 1 on entire data set is: 0.22137404580152673
+Accuracy of k-model 2 on entire data set is: 0.26717557251908397
+Accuracy of k-model 3 on entire data set is: 0.26717557251908397
+Accuracy of k-model 4 on entire data set is: 0.26717557251908397
+Accuracy of k-model 5 on entire data set is: 0.22137404580152673
+Dataset: iris.csv
+Found 150 data points with 4 features and 3 separate labels
+Using 23 data points per k-fold
+Accuracy of k-model 1 on entire data set is: 0.3
+Accuracy of k-model 2 on entire data set is: 0.25333333333333335
+Accuracy of k-model 3 on entire data set is: 0.24666666666666667
+Accuracy of k-model 4 on entire data set is: 0.32
+Accuracy of k-model 5 on entire data set is: 0.32
+Dataset: parkinsons.csv
+Found 195 data points with 22 features and 2 separate labels
+Using 30 data points per k-fold
+Accuracy of k-model 1 on entire data set is: 0.24615384615384617
+Accuracy of k-model 2 on entire data set is: 0.08205128205128205
+Accuracy of k-model 3 on entire data set is: 0.15384615384615385
+Accuracy of k-model 4 on entire data set is: 0.11282051282051282
+Accuracy of k-model 5 on entire data set is: 0.11282051282051282
+Dataset: statlog-australian-credit.csv
+Found 690 data points with 14 features and 2 separate labels    
+Using 104 data points per k-fold
+Accuracy of k-model 1 on entire data set is: 0.1463768115942029
+Accuracy of k-model 2 on entire data set is: 0.5753623188405798
+Accuracy of k-model 3 on entire data set is: 0.5217391304347826
+Accuracy of k-model 4 on entire data set is: 0.34202898550724636
+Accuracy of k-model 5 on entire data set is: 0.41739130434782606
