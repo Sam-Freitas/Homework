@@ -18,11 +18,19 @@ def plot_2D_labeled_data(X,y,fig_number,fig_title):
 
     plt.ion()
     f = plt.figure(fig_number)
-    plt.scatter(X[:,0],X[:,1],c=colors,alpha=0.5)
+    plt.scatter(X[:,0],X[:,1],c=y)
     # plt.axis('tight')
     plt.title(fig_title)
     f.show()
     return fig_number+1
+
+def anomalyScores(originalDF, reducedDF):
+    loss = np.sum((np.array(originalDF) - \
+                   np.array(reducedDF))**2, axis=1)
+    
+    print('Mean for anomaly scores: ', np.mean(loss))
+    
+    return loss 
 
 def get_acc(predictions,labels):
 
@@ -86,12 +94,12 @@ model.compile(optimizer='SGD',
               loss='CategoricalCrossentropy',
               metrics=['accuracy'])
 
-model.save('my_model.h5')
+model.save('my_model')
 
-callback = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=5,restore_best_weights=True)
+callback = tf.keras.callbacks.EarlyStopping(monitor='accuracy', patience=10,restore_best_weights=True)
 
 # Train the model
-num_epochs = 100
+num_epochs = 50
 batch_size = 256
 
 percent_given_labels = [.1,.25]
@@ -106,7 +114,7 @@ for count, val in enumerate(percent_given_labels):
     this_X = unlabeled_data[idx,:]
     this_y = binned_labels[idx]
 
-    model = tf.keras.models.load_model('my_model.h5')
+    model = tf.keras.models.load_model('my_model')
 
     history = model.fit(x=this_X, y=this_y,
                         epochs=num_epochs,
@@ -115,18 +123,6 @@ for count, val in enumerate(percent_given_labels):
                         validation_data=(this_X, this_y),
                         verbose=0,
                         callbacks=[callback])
-
-    acc_hist = history.history['accuracy']
-    err_hist = 1-np.asarray(acc_hist)
-
-    print('Using ', val, ' of data')
-
-    print('(1) - first classifier training error with only assigned labels:', err_hist[0])
-
-    num_epochs_used = len(acc_hist)
-    middle_epoch = round(num_epochs_used/2)
-    
-    print('(2) - error at time point epoch num:', middle_epoch, ' - gives error:', err_hist[middle_epoch])
     
     predictions = model.predict(unlabeled_data)
 
@@ -134,11 +130,9 @@ for count, val in enumerate(percent_given_labels):
 
     this_accuracy = get_acc(prediction_labels,labels)
 
-    print('(3) - Error after entire SSL :', np.min(err_hist))
+    print('Using',val,'of the data the model is',this_accuracy)
 
-    print('Accuracy of model on entire data set is :', this_accuracy)
-
-    fig_title = "Predictions using " + str(val) + " of data with: " + str(this_accuracy) + "accuracy"
+    fig_title = "Predictions using" + str(val) + " of data with acc:" + str(this_accuracy) + "accurate"
 
     fig_num = plot_2D_labeled_data(unlabeled_data,prediction_labels,fig_num,fig_title)
 

@@ -1,0 +1,10 @@
+Using  0.1  of data
+(1) - first classifier training error with only assigned labels: 0.5800000131130219
+(2) - error at time point epoch num: 28  - gives error: 0.2799999713897705
+(3) - Error after entire SSL : 0.12000000476837158
+Accuracy of model on entire data set is : 0.914
+Using  0.25  of data
+(1) - first classifier training error with only assigned labels: 0.5800000131130219
+(2) - error at time point epoch num: 50  - gives error: 0.07599997520446777
+(3) - Error after entire SSL : 0.02799999713897705
+Accuracy of model on entire data set is : 0.943
