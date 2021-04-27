@@ -11,6 +11,7 @@ import matplotlib.cm as cm
 import pandas as pd
 import random
 
+# plots 2D data given as X data and y labels
 def plot_2D_labeled_data(X,y,fig_number,fig_title):
     # put plt.ioff() and plt.show() at end 
 
@@ -24,6 +25,7 @@ def plot_2D_labeled_data(X,y,fig_number,fig_title):
     f.show()
     return fig_number+1
 
+# calculates the accuracy of predicted labels
 def get_acc(predictions,labels):
 
     conf_mat = confusion_matrix(predictions, labels)
@@ -31,6 +33,7 @@ def get_acc(predictions,labels):
 
     return acc
 
+# converts binned predictions to labels 
 def covert_to_lables(predictions):
 
     labels = np.zeros(shape=(len(predictions)))
@@ -54,6 +57,7 @@ d2 = np.random.multivariate_normal(mean2, cov, num_points_per)
 l1 = np.zeros((1,num_points_per))+1
 l2 = np.zeros((1,num_points_per))+2
 
+# combine data
 unlabeled_data = np.append(d1,d2,axis=0)
 labels = np.append(l1,l2)
 
@@ -64,36 +68,35 @@ fig_num = plot_2D_labeled_data(unlabeled_data,labels,1,"Training data")
 unique_labels = np.unique(labels)
 unique_labels2 = np.append(unique_labels,np.max(unique_labels)+1)
 
+# bin labels
 binned_labels = label_binarize(labels,classes= unique_labels2)
 binned_labels = binned_labels[:,0:int(np.max(unique_labels))]
 
+# get input size of the data
 input_size = unlabeled_data.shape
 label_size = binned_labels.shape
 print("input shape",input_size)
 
-# Call neural network API
+# model archecture
 model = tf.keras.Sequential()
-# Apply linear activation function to input layer
-# Generate hidden layer with 14 nodes, the same as the input layer
 model.add(layers.Dense(units=128, activation='linear',input_dim=input_size[1]))
 model.add(layers.Dense(units=15, activation='relu'))
 model.add(layers.Dropout(0.2))
-# Apply linear activation function to hidden layer
-# Generate output layer with 14 nodes
 model.add(layers.Dense(units=label_size[1], activation='sigmoid'))
 # Compile the model
 model.compile(optimizer='SGD',
               loss='CategoricalCrossentropy',
               metrics=['accuracy'])
-
+# save randomly generated model
 model.save('my_model.h5')
-
+# create early stopping callback
 callback = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=5,restore_best_weights=True)
 
-# Train the model
+# training variables
 num_epochs = 100
 batch_size = 256
 
+# number to give the 
 percent_given_labels = [.1,.25]
 
 for count, val in enumerate(percent_given_labels):
